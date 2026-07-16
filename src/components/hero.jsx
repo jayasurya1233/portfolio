@@ -1,126 +1,179 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowRight, FileText, Code2, Cloud, Database } from 'lucide-react'
+import { ArrowRight, ChevronRight } from 'lucide-react'
 
-const roles = ["Backend Developer", "Java Developer", "Cloud Engineer"];
+const roles = ["Backend Developer", "Java Developer", "Cloud Engineer"]
+
+const terminalLines = [
+  { prompt: "~", cmd: "whoami", output: "Jayasurya B" },
+  { prompt: "~", cmd: "cat role.txt", output: "Backend Developer | Cloud Engineer" },
+  { prompt: "~", cmd: "ls skills/", output: "Java  SpringBoot  AWS  Docker  MySQL" },
+  { prompt: "~", cmd: "echo $STATUS", output: "Open for opportunities" },
+]
 
 export default function Hero() {
-  const [roleIndex, setRoleIndex] = useState(0);
-  const [displayedText, setDisplayedText] = useState("");
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [roleIndex, setRoleIndex] = useState(0)
+  const [displayedText, setDisplayedText] = useState("")
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [currentLine, setCurrentLine] = useState(0)
+  const [displayedLines, setDisplayedLines] = useState([])
+  const [currentCmdText, setCurrentCmdText] = useState("")
+  const [showOutput, setShowOutput] = useState(false)
 
   useEffect(() => {
-    let timer;
-    const currentFullRole = roles[roleIndex];
-    
+    let timer
+    const currentFullRole = roles[roleIndex]
     if (isDeleting) {
-      timer = setTimeout(() => {
-        setDisplayedText(prev => prev.slice(0, -1));
-      }, 50);
+      timer = setTimeout(() => setDisplayedText(prev => prev.slice(0, -1)), 50)
     } else {
-      timer = setTimeout(() => {
-        setDisplayedText(currentFullRole.slice(0, displayedText.length + 1));
-      }, 100);
+      timer = setTimeout(() => setDisplayedText(currentFullRole.slice(0, displayedText.length + 1)), 100)
     }
-
     if (!isDeleting && displayedText === currentFullRole) {
-      timer = setTimeout(() => setIsDeleting(true), 1500);
+      timer = setTimeout(() => setIsDeleting(true), 2000)
     } else if (isDeleting && displayedText === "") {
-      setIsDeleting(false);
-      setRoleIndex((prev) => (prev + 1) % roles.length);
+      setIsDeleting(false)
+      setRoleIndex((prev) => (prev + 1) % roles.length)
     }
+    return () => clearTimeout(timer)
+  }, [displayedText, isDeleting, roleIndex])
 
-    return () => clearTimeout(timer);
-  }, [displayedText, isDeleting, roleIndex]);
+  useEffect(() => {
+    if (currentLine >= terminalLines.length) return
+    const line = terminalLines[currentLine]
+    let i = 0
+    const typeTimer = setInterval(() => {
+      if (i <= line.cmd.length) {
+        setCurrentCmdText(line.cmd.slice(0, i))
+        i++
+      } else {
+        clearInterval(typeTimer)
+        setTimeout(() => {
+          setShowOutput(true)
+          setTimeout(() => {
+            setDisplayedLines(prev => [...prev, { ...line, showOutput: true }])
+            setShowOutput(false)
+            setCurrentCmdText("")
+            setCurrentLine(prev => prev + 1)
+          }, 600)
+        }, 300)
+      }
+    }, 40)
+    return () => clearInterval(typeTimer)
+  }, [currentLine])
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center pt-24 pb-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-        
-        {/* Left Copy block */}
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="lg:col-span-7 flex flex-col justify-center space-y-6"
+    <section id="home" className="relative min-h-screen flex items-center pt-20 pb-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
+        <motion.div
+          initial={{ opacity: 0, x: -40 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8 }}
+          className="space-y-8"
         >
-          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400 w-max">
-            Open for Opportunities
-          </span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-500/10 border border-brand-500/20">
+            <span className="w-2 h-2 rounded-full bg-brand-400 animate-pulse" />
+            <span className="text-xs font-semibold text-brand-400 font-mono">Available for work</span>
+          </div>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight">
-            Hi, I am <span className="bg-gradient-to-r from-indigo-500 to-cyan-500 bg-clip-text text-transparent">Jayasurya B</span>
-            <div className="h-16 mt-2 text-slate-700 dark:text-slate-200 text-3xl sm:text-4xl font-bold">
+          <div>
+            <p className="text-dark-muted font-mono text-sm mb-3">
+              <span className="text-brand-500">$</span> greet --name
+            </p>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
+              Hi, I'm{' '}
+              <span className="text-gradient">Jayasurya B</span>
+            </h1>
+            <div className="mt-4 h-12 font-mono text-xl sm:text-2xl font-bold text-brand-400">
               <span>{displayedText}</span>
-              <span className="animate-pulse text-indigo-500">|</span>
+              <span className="animate-pulse text-brand-500">_</span>
             </div>
-          </h1>
+          </div>
 
-          <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed max-w-xl">
-            Computer Science undergraduate specializing in Backend Development, Java, Spring Boot, Cloud Computing, and DevOps. Passionate about creating secure, scalable, and data-driven solutions.
+          <p className="text-dark-muted text-base sm:text-lg leading-relaxed max-w-xl">
+            Computer Science undergraduate specializing in Backend Development, Java, Spring Boot,
+            Cloud Computing, and DevOps. Passionate about creating secure, scalable, and data-driven solutions.
           </p>
 
-          <div className="flex flex-wrap gap-4 pt-2">
-            <a 
-              href="#projects" 
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-indigo-600 text-white font-semibold hover:bg-indigo-500 transition-all shadow-md shadow-indigo-600/10 hover:shadow-indigo-600/20"
+          <div className="flex flex-wrap gap-4">
+            <a
+              href="#projects"
+              className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-brand-500 text-dark-bg font-semibold hover:bg-brand-400 transition-all shadow-lg shadow-brand-500/20 hover:shadow-brand-500/30"
             >
-              View Projects <ArrowRight size={16} />
+              View Projects
+              <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
             </a>
-            <a 
-              href="#contact" 
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
+            <a
+              href="#contact"
+              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl border border-white/10 text-dark-text font-semibold hover:bg-white/5 hover:border-brand-500/30 transition-all"
             >
               Contact Me
             </a>
           </div>
         </motion.div>
 
-        {/* Right Floating Visual Graphics */}
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
+        <motion.div
+          initial={{ opacity: 0, x: 40 }}
+          animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="lg:col-span-5 relative flex justify-center items-center"
+          className="relative"
         >
-          {/* Main Visual Circle Card */}
-          <div className="relative w-72 h-72 sm:w-80 sm:h-80 rounded-full bg-gradient-to-tr from-indigo-600 to-cyan-500 p-1 shadow-2xl shadow-indigo-500/10 dark:shadow-indigo-500/5">
-            <div className="w-full h-full bg-slate-100 dark:bg-dark-bg rounded-full flex flex-col justify-center items-center overflow-hidden">
-              <span className="text-7xl">⚡</span>
-              <p className="font-bold text-lg mt-3 text-slate-700 dark:text-slate-200">Jayasurya B</p>
-              <p className="text-xs text-indigo-500 dark:text-indigo-400 font-medium">Coimbatore, TN, India</p>
+          <div className="rounded-2xl bg-dark-card/90 border border-white/10 overflow-hidden shadow-2xl shadow-black/30">
+            <div className="flex items-center gap-2 px-4 py-3 border-b border-white/5 bg-dark-surface/50">
+              <div className="flex gap-1.5">
+                <span className="w-3 h-3 rounded-full bg-red-500/80" />
+                <span className="w-3 h-3 rounded-full bg-yellow-500/80" />
+                <span className="w-3 h-3 rounded-full bg-green-500/80" />
+              </div>
+              <span className="text-xs font-mono text-dark-muted ml-2">jayasurya@portfolio:~</span>
             </div>
+            <div className="p-5 font-mono text-sm space-y-3 min-h-[280px]">
+              {displayedLines.map((line, i) => (
+                <div key={i}>
+                  <div className="flex items-center gap-2">
+                    <span className="text-brand-500 font-bold">{line.prompt}</span>
+                    <span className="text-dark-muted">~/portfolio $</span>
+                    <span className="text-dark-text">{line.cmd}</span>
+                  </div>
+                  <div className="pl-6 text-brand-300 text-xs">{line.output}</div>
+                </div>
+              ))}
+              {currentLine < terminalLines.length && (
+                <div className="flex items-center gap-2">
+                  <span className="text-brand-500 font-bold">~</span>
+                  <span className="text-dark-muted">~/portfolio $</span>
+                  <span className="text-dark-text">{currentCmdText}</span>
+                  {!showOutput && <span className="w-2 h-4 bg-brand-400 animate-pulse" />}
+                </div>
+              )}
+              {showOutput && currentLine < terminalLines.length && (
+                <div className="pl-6 text-brand-300 text-xs animate-fade-in">
+                  {terminalLines[currentLine].output}
+                </div>
+              )}
+            </div>
+          </div>
 
-            {/* Floating Badges */}
-            <motion.div 
-              animate={{ y: [0, -12, 0] }} 
-              transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }} 
-              className="absolute -top-4 -left-4 p-3 bg-white dark:bg-dark-card rounded-2xl shadow-md border border-slate-200/50 dark:border-slate-800/40 flex items-center gap-2.5"
-            >
-              <Code2 className="text-indigo-500" size={20} />
-              <div className="text-left"><p className="text-[10px] text-slate-400 font-medium leading-none">PRIMARY</p><p className="text-xs font-bold text-slate-700 dark:text-slate-200">Java Developer</p></div>
-            </motion.div>
+          <div className="absolute -bottom-6 -right-6 p-4 rounded-xl glass glow-border hidden sm:flex items-center gap-3 animate-float">
+            <div className="p-2 rounded-lg bg-brand-500/10">
+              <ChevronRight className="text-brand-400" size={20} />
+            </div>
+            <div>
+              <p className="text-[10px] text-dark-muted uppercase font-semibold tracking-wider">Primary Stack</p>
+              <p className="text-sm font-bold text-dark-text">Java + Spring Boot</p>
+            </div>
+          </div>
 
-            <motion.div 
-              animate={{ y: [0, 12, 0] }} 
-              transition={{ repeat: Infinity, duration: 4, ease: "easeInOut", delay: 1 }} 
-              className="absolute -bottom-4 -right-4 p-3 bg-white dark:bg-dark-card rounded-2xl shadow-md border border-slate-200/50 dark:border-slate-800/40 flex items-center gap-2.5"
-            >
-              <Cloud className="text-cyan-500" size={20} />
-              <div className="text-left"><p className="text-[10px] text-slate-400 font-medium leading-none">PLATFORM</p><p className="text-xs font-bold text-slate-700 dark:text-slate-200">AWS / DevOps</p></div>
-            </motion.div>
-
-            <motion.div 
-              animate={{ x: [0, 8, 0] }} 
-              transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 0.5 }} 
-              className="absolute top-[40%] -right-12 p-3 bg-white dark:bg-dark-card rounded-2xl shadow-md border border-slate-200/50 dark:border-slate-800/40 flex items-center gap-2.5"
-            >
-              <Database className="text-purple-500" size={20} />
-              <div className="text-left"><p className="text-[10px] text-slate-400 font-medium leading-none">ENGINE</p><p className="text-xs font-bold text-slate-700 dark:text-slate-200">Spring Boot</p></div>
-            </motion.div>
+          <div className="absolute -top-6 -left-6 p-4 rounded-xl glass glow-border hidden sm:flex items-center gap-3 animate-float" style={{ animationDelay: '2s' }}>
+            <div className="p-2 rounded-lg bg-accent/10">
+              <span className="text-lg">☁️</span>
+            </div>
+            <div>
+              <p className="text-[10px] text-dark-muted uppercase font-semibold tracking-wider">Platform</p>
+              <p className="text-sm font-bold text-dark-text">AWS + Docker</p>
+            </div>
           </div>
         </motion.div>
-
       </div>
     </section>
   )

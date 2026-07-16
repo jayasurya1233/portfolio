@@ -2,35 +2,62 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer utilities {
-  .glass-light {
-    @apply bg-white/70 backdrop-blur-md border border-slate-200/50 shadow-lg shadow-slate-100/40;
+@layer base {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #1e293b transparent;
   }
-  .glass-dark {
-    @apply bg-dark-card/65 backdrop-blur-md border border-slate-800/40 shadow-xl shadow-black/20;
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1e293b;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #334155;
+  }
+  ::selection {
+    background: rgba(20, 184, 166, 0.3);
+    color: #f0fdfa;
   }
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
+@layer utilities {
+  .glass {
+    @apply bg-dark-card/60 backdrop-blur-xl border border-white/5 shadow-xl;
+  }
+  .glass-strong {
+    @apply bg-dark-card/80 backdrop-blur-2xl border border-white/10 shadow-2xl;
+  }
+  .glow-border {
+    @apply border border-brand-500/20 shadow-[0_0_15px_rgba(20,184,166,0.1)];
+  }
+  .text-gradient {
+    @apply bg-gradient-to-r from-brand-400 to-accent-light bg-clip-text text-transparent;
+  }
+  .bg-grid {
+    background-size: 60px 60px;
+    background-image: linear-gradient(rgba(20,184,166,0.04) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(20,184,166,0.04) 1px, transparent 1px);
+  }
 }
-::-webkit-scrollbar-track {
-  background: transparent;
+
+.section-padding {
+  @apply py-20 sm:py-28 px-4 sm:px-6 lg:px-8;
 }
-.dark ::-webkit-scrollbar-track {
-  background: #0B0F19;
+
+.card-base {
+  @apply rounded-2xl bg-dark-card/70 backdrop-blur-sm border border-white/5 p-6 transition-all duration-300;
 }
-::-webkit-scrollbar-thumb {
-  background: #CBD5E1;
-  border-radius: 4px;
+
+.card-hover {
+  @apply hover:border-brand-500/20 hover:shadow-[0_0_30px_rgba(20,184,166,0.08)] hover:-translate-y-1;
 }
-.dark ::-webkit-scrollbar-thumb {
-  background: #1E293B;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #94A3B8;
-}
-.dark ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+
+.tag {
+  @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-brand-500/10 text-brand-400 border border-brand-500/20;
 }

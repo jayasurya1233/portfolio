@@ -1,152 +1,174 @@
 import React, { useState } from 'react'
-import { Mail, Phone, MapPin, Clipboard, Check, Linkedin, Github, Trophy } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { Mail, Phone, MapPin, Clipboard, Check, Linkedin, Github, Trophy, Send } from 'lucide-react'
 
 export default function Contact() {
-  const [copiedText, setCopiedText] = useState(false);
-  const emailAddr = "jayasuryaff34@gmail.com";
+  const [copied, setCopied] = useState(false)
+  const email = "jayasuryaff34@gmail.com"
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(emailAddr);
-    setCopiedText(true);
-    setTimeout(() => setCopiedText(false), 2000);
-  };
+    navigator.clipboard.writeText(email)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
 
   return (
-    <section id="contact" className="py-24 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">Let's Connect</h2>
-          <div className="h-1.5 w-16 bg-indigo-500 mx-auto mt-4 rounded-full" />
-        </div>
+    <section id="contact" className="section-padding">
+      <div className="max-w-6xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <span className="font-mono text-xs text-brand-400 tracking-widest uppercase">// contact</span>
+          <h2 className="text-3xl sm:text-4xl font-extrabold mt-3 tracking-tight">
+            Let's <span className="text-gradient">Connect</span>
+          </h2>
+        </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-          {/* Left Info Column */}
-          <div className="lg:col-span-5 space-y-6 flex flex-col justify-between">
-            <div>
-              <h3 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-2">Got a project?</h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400 mb-6 leading-relaxed">
-                Whether you have an internship option, a full-time job opening, or want to build a scaling infrastructure project together—feel free to drop an inquiry!
-              </p>
-
-              <div className="space-y-4">
-                <div className="flex items-center gap-4 p-4 rounded-xl bg-slate-100/50 dark:bg-slate-900/40">
-                  <Mail className="text-indigo-500 shrink-0" size={20} />
-                  <div className="text-left flex-1 min-w-0">
-                    <p className="text-xs font-semibold text-slate-400">EMAIL</p>
-                    <span className="text-sm font-bold text-slate-700 dark:text-slate-200 block truncate">{emailAddr}</span>
-                  </div>
-                  <button 
-                    onClick={handleCopy}
-                    className="p-1.5 rounded-md hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-400"
-                    title="Copy Email"
-                  >
-                    {copiedText ? <Check className="text-emerald-500" size={16} /> : <Clipboard size={16} />}
-                  </button>
-                </div>
-
-                <div className="flex items-center gap-4 p-4 rounded-xl bg-slate-100/50 dark:bg-slate-900/40">
-                  <Phone className="text-indigo-500 shrink-0" size={20} />
-                  <div className="text-left">
-                    <p className="text-xs font-semibold text-slate-400">PHONE</p>
-                    <span className="text-sm font-bold text-slate-700 dark:text-slate-200 block">+91 9025590764</span>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-4 p-4 rounded-xl bg-slate-100/50 dark:bg-slate-900/40">
-                  <MapPin className="text-indigo-500 shrink-0" size={20} />
-                  <div className="text-left">
-                    <p className="text-xs font-semibold text-slate-400">LOCATION</p>
-                    <span className="text-sm font-bold text-slate-700 dark:text-slate-200 block">Coimbatore, Tamil Nadu, India</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Profiles Links */}
-            <div className="space-y-3">
-              <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Connect with me online</h4>
-              <div className="flex gap-3">
-                <a 
-                  href="https://linkedin.com/in/jayasurya-boopathi" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="p-3 bg-slate-100 dark:bg-slate-800/50 hover:bg-indigo-50 dark:hover:bg-indigo-950/20 text-slate-600 dark:text-slate-300 hover:text-indigo-500 dark:hover:text-indigo-400 rounded-xl transition-all"
-                >
-                  <Linkedin size={20} />
-                </a>
-                <a 
-                  href="https://github.com/Suryakumar-bit" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="p-3 bg-slate-100 dark:bg-slate-800/50 hover:bg-indigo-50 dark:hover:bg-indigo-950/20 text-slate-600 dark:text-slate-300 hover:text-indigo-500 dark:hover:text-indigo-400 rounded-xl transition-all"
-                >
-                  <Github size={20} />
-                </a>
-                <a 
-                  href="https://leetcode.com/u/Jayasurya_" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="p-3 bg-slate-100 dark:bg-slate-800/50 hover:bg-indigo-50 dark:hover:bg-indigo-950/20 text-slate-600 dark:text-slate-300 hover:text-indigo-500 dark:hover:text-indigo-400 rounded-xl transition-all"
-                >
-                  <Trophy size={20} />
-                </a>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Form Column */}
-          <form 
-            onSubmit={(e) => { e.preventDefault(); alert("Form submitted! (In production, route this directly to an active email service like EmailJS or Formspree).") }} 
-            className="lg:col-span-7 p-8 bg-white dark:bg-dark-card border border-slate-200/50 dark:border-slate-800/40 rounded-3xl shadow-sm space-y-5"
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+          {/* Info */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="lg:col-span-2 space-y-6"
           >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-1 text-left">
-                <label className="text-xs font-bold text-slate-400 uppercase">Your Name</label>
-                <input 
-                  type="text" 
-                  required 
-                  placeholder="John Doe" 
-                  className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-slate-100" 
+            <div className="card-base p-6">
+              <h3 className="text-xl font-bold text-dark-text mb-2">Got a project?</h3>
+              <p className="text-sm text-dark-muted leading-relaxed">
+                Whether you have an internship option, a full-time job opening, or want to build a scaling
+                infrastructure project together — feel free to reach out!
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <div className="card-base p-4 flex items-center gap-4 hover:border-brand-500/20 transition-colors">
+                <div className="p-2.5 rounded-lg bg-brand-500/10">
+                  <Mail size={18} className="text-brand-400" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-[10px] font-mono font-semibold text-dark-muted uppercase tracking-wider">Email</p>
+                  <span className="text-sm font-medium text-dark-text block truncate">{email}</span>
+                </div>
+                <button
+                  onClick={handleCopy}
+                  className="p-2 rounded-lg hover:bg-white/5 text-dark-muted transition-colors"
+                  title="Copy"
+                >
+                  {copied ? <Check size={16} className="text-brand-400" /> : <Clipboard size={16} />}
+                </button>
+              </div>
+
+              <div className="card-base p-4 flex items-center gap-4 hover:border-brand-500/20 transition-colors">
+                <div className="p-2.5 rounded-lg bg-brand-500/10">
+                  <Phone size={18} className="text-brand-400" />
+                </div>
+                <div>
+                  <p className="text-[10px] font-mono font-semibold text-dark-muted uppercase tracking-wider">Phone</p>
+                  <span className="text-sm font-medium text-dark-text">+91 9025590764</span>
+                </div>
+              </div>
+
+              <div className="card-base p-4 flex items-center gap-4 hover:border-brand-500/20 transition-colors">
+                <div className="p-2.5 rounded-lg bg-brand-500/10">
+                  <MapPin size={18} className="text-brand-400" />
+                </div>
+                <div>
+                  <p className="text-[10px] font-mono font-semibold text-dark-muted uppercase tracking-wider">Location</p>
+                  <span className="text-sm font-medium text-dark-text">Coimbatore, Tamil Nadu, India</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <a
+                href="https://linkedin.com/in/jayasurya-boopathi"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 rounded-xl bg-dark-card border border-white/5 hover:border-brand-500/20 hover:bg-brand-500/5 text-dark-muted hover:text-brand-400 transition-all"
+              >
+                <Linkedin size={20} />
+              </a>
+              <a
+                href="https://github.com/Suryakumar-bit"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 rounded-xl bg-dark-card border border-white/5 hover:border-brand-500/20 hover:bg-brand-500/5 text-dark-muted hover:text-brand-400 transition-all"
+              >
+                <Github size={20} />
+              </a>
+              <a
+                href="https://leetcode.com/u/Jayasurya_"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 rounded-xl bg-dark-card border border-white/5 hover:border-brand-500/20 hover:bg-brand-500/5 text-dark-muted hover:text-brand-400 transition-all"
+              >
+                <Trophy size={20} />
+              </a>
+            </div>
+          </motion.div>
+
+          {/* Form */}
+          <motion.form
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            onSubmit={(e) => {
+              e.preventDefault()
+              alert("Message sent! (Connect EmailJS or Formspree for production)")
+            }}
+            className="lg:col-span-3 card-base p-7 space-y-5"
+          >
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-1.5 text-left">
+                <label className="text-[11px] font-mono font-semibold text-dark-muted uppercase tracking-wider">Name</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Your name"
+                  className="w-full px-4 py-3 bg-dark-surface border border-white/5 rounded-xl text-sm text-dark-text placeholder-dark-muted/50 focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500/40 transition-all"
                 />
               </div>
-              <div className="space-y-1 text-left">
-                <label className="text-xs font-bold text-slate-400 uppercase">Email Address</label>
-                <input 
-                  type="email" 
-                  required 
-                  placeholder="john@example.com" 
-                  className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-slate-100" 
+              <div className="space-y-1.5 text-left">
+                <label className="text-[11px] font-mono font-semibold text-dark-muted uppercase tracking-wider">Email</label>
+                <input
+                  type="email"
+                  required
+                  placeholder="you@example.com"
+                  className="w-full px-4 py-3 bg-dark-surface border border-white/5 rounded-xl text-sm text-dark-text placeholder-dark-muted/50 focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500/40 transition-all"
                 />
               </div>
             </div>
 
-            <div className="space-y-1 text-left">
-              <label className="text-xs font-bold text-slate-400 uppercase">Subject</label>
-              <input 
-                type="text" 
-                required 
-                placeholder="Collaboration Opportunity" 
-                className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-slate-100" 
+            <div className="space-y-1.5 text-left">
+              <label className="text-[11px] font-mono font-semibold text-dark-muted uppercase tracking-wider">Subject</label>
+              <input
+                type="text"
+                required
+                placeholder="What's this about?"
+                className="w-full px-4 py-3 bg-dark-surface border border-white/5 rounded-xl text-sm text-dark-text placeholder-dark-muted/50 focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500/40 transition-all"
               />
             </div>
 
-            <div className="space-y-1 text-left">
-              <label className="text-xs font-bold text-slate-400 uppercase">Your Message</label>
-              <textarea 
-                rows="5" 
-                required 
-                placeholder="I would love to discuss a job proposal..." 
-                className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-slate-100" 
+            <div className="space-y-1.5 text-left">
+              <label className="text-[11px] font-mono font-semibold text-dark-muted uppercase tracking-wider">Message</label>
+              <textarea
+                rows="5"
+                required
+                placeholder="Tell me about your project or opportunity..."
+                className="w-full px-4 py-3 bg-dark-surface border border-white/5 rounded-xl text-sm text-dark-text placeholder-dark-muted/50 focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500/40 transition-all resize-none"
               />
             </div>
 
-            <button 
-              type="submit" 
-              className="w-full py-4 text-center text-sm font-bold text-white bg-indigo-600 rounded-xl hover:bg-indigo-500 transition-colors shadow-md shadow-indigo-600/10"
+            <button
+              type="submit"
+              className="w-full py-3.5 rounded-xl bg-brand-500 text-dark-bg font-semibold hover:bg-brand-400 transition-all shadow-lg shadow-brand-500/20 hover:shadow-brand-500/30 inline-flex items-center justify-center gap-2"
             >
-              Send Message
+              <Send size={16} /> Send Message
             </button>
-          </form>
+          </motion.form>
         </div>
       </div>
     </section>
